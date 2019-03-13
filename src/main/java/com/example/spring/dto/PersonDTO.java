@@ -11,9 +11,8 @@ import javax.validation.constraints.NotNull;
  *
  */
 @SuppressWarnings("serial")
-public class PessoaDTO implements Serializable {
+public class PersonDTO implements Serializable {
 	
-	@NotNull(message = "Id obrigatorio!")
 	private Long id;
 	
 	@NotNull(message = "Nome obrigatorio!")

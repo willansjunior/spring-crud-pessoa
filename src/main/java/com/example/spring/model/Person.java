@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "person")
 @SuppressWarnings("serial")
-public class Pessoa implements Serializable {
+public class Person implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

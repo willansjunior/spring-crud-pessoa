@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.spring.model.Pessoa;
+import com.example.spring.model.Person;
 
 /**
  * @author willans firmo
@@ -13,8 +13,8 @@ import com.example.spring.model.Pessoa;
  *
  */
 @Repository
-public interface PessoaRepository extends JpaRepository<Pessoa, Long> {
+public interface PersonRepository extends JpaRepository<Person, Long> {
 	
-	List<Pessoa> findByName(String name);
+	List<Person> findByName(String name);
 
 }
