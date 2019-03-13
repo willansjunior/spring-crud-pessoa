@@ -32,19 +32,19 @@ import com.example.spring.service.PersonService;
 @WebAppConfiguration
 public class DemoApplicationTests {
 	
-	PersonRepository pessoaRepository;
+	PersonRepository personRepository;
 	
-	PersonService pessoaService;
+	PersonService personService;
 	
 	@Autowired
 	ModelMapper mapper;
 	
-	private List<PersonDTO> listPessoa = new ArrayList<>();
+	private List<PersonDTO> listPerson = new ArrayList<>();
 	
 	@Before
 	public void inicializar() {
-		pessoaRepository = EasyMock.createMock(PersonRepository.class);
-		pessoaService = EasyMock.createMock(PersonService.class);
+		personRepository = EasyMock.createMock(PersonRepository.class);
+		personService = EasyMock.createMock(PersonService.class);
 		
 		/**
 		 * Montando a lista de pessoas
@@ -55,76 +55,76 @@ public class DemoApplicationTests {
 
 	/**
 	 * Listar todas as pessoas
-	 * @return List<PessoaDTO>
+	 * @return List<PersonDTO>
 	 */
 	@Test
-	public void findAllPessoa() {
-		EasyMock.expect(pessoaService.findAll()).andReturn(listPessoa);
-		EasyMock.replay(pessoaService);
-		List<PersonDTO> list = pessoaService.findAll();
+	public void findAllPerson() {
+		EasyMock.expect(personService.findAll()).andReturn(listPerson);
+		EasyMock.replay(personService);
+		List<PersonDTO> list = personService.findAll();
 		assertNotNull(list);
-		EasyMock.verify(pessoaService);
+		EasyMock.verify(personService);
 	}
 	
 	/**
 	 * Listar todas as pessoas usando como filtro o nome
 	 * @param nome String - o nome da pessoa
-	 * @return List<PessoaDTO> - Retorno em lista pois podem existir homonimos
+	 * @return List<PersonDTO> - Retorno em lista pois podem existir homonimos
 	 */
 	@Test
-	public void findByNamePessoa() {
-		EasyMock.expect(pessoaService.findByNome("Willans Firmo")).andReturn(listPessoa);
-		EasyMock.replay(pessoaService);
-		List<PersonDTO> list = pessoaService.findByNome("Willans Firmo");
+	public void findByNamePerson() {
+		EasyMock.expect(personService.findByNome("Willans Firmo")).andReturn(listPerson);
+		EasyMock.replay(personService);
+		List<PersonDTO> list = personService.findByNome("Willans Firmo");
 		assertNotNull(list);
-		EasyMock.verify(pessoaService);
+		EasyMock.verify(personService);
 	}
 	
 	/**
 	 * Criar pessoa
 	 * @param PersonDTO
-	 * @return PessoaDTO
+	 * @return PersonDTO
 	 */
 	@Test
-	public void criarPessoa() {
+	public void createPerson() {
 		PersonDTO dto = new PersonDTO();
 		dto.setId(12L);
 		dto.setName("Willans Firmo");
 		
-		EasyMock.expect(pessoaRepository.findOne(dto.getId())).andReturn(null);
-		EasyMock.replay(pessoaRepository);
-		Person pessoaMock = pessoaRepository.findOne(dto.getId());
-		assertNull(pessoaMock);
+		EasyMock.expect(personRepository.findOne(dto.getId())).andReturn(null);
+		EasyMock.replay(personRepository);
+		Person personMock = personRepository.findOne(dto.getId());
+		assertNull(personMock);
 		
-		EasyMock.verify(pessoaRepository);
+		EasyMock.verify(personRepository);
 		
-		EasyMock.expect(pessoaService.create(dto)).andReturn(dto);
-		EasyMock.replay(pessoaService);
-		PersonDTO pessoaDTO = pessoaService.create(dto);
-		assertNotNull(pessoaDTO);
+		EasyMock.expect(personService.create(dto)).andReturn(dto);
+		EasyMock.replay(personService);
+		PersonDTO personDTO = personService.create(dto);
+		assertNotNull(personDTO);
 		
-		EasyMock.verify(pessoaService);
+		EasyMock.verify(personService);
 	}
 	
 	/**
 	 * Montagem da lista de Pessoas
 	 */
 	private void gerarLista() {
-		Person pessoa = getPessoa();
+		Person person = getPessoa();
 		
-		listPessoa.add(mapper.map(pessoa, PersonDTO.class));
+		listPerson.add(mapper.map(person, PersonDTO.class));
 	}
 	
 	/**
 	 * Monta uma pessoa
-	 * @return Pessoa
+	 * @return Person
 	 */
 	private Person getPessoa() {
-		Person pessoa = new Person();
-		pessoa.setId(12L);
-		pessoa.setName("Willans Firmo");
+		Person person = new Person();
+		person.setId(12L);
+		person.setName("Willans Firmo");
 		
-		return pessoa;
+		return person;
 	}
 	
 }

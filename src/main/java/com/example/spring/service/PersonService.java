@@ -23,22 +23,22 @@ import com.example.spring.repository.PersonRepository;
 @Service
 public class PersonService {
 	
-	private PersonRepository pessoaRepository;
+	private PersonRepository personRepository;
 	
 	private ModelMapper mapper;
 	
 	@Autowired
-	public PersonService(PersonRepository pessoaRepository,
+	public PersonService(PersonRepository personRepository,
 			ModelMapper mapper) {
-		this.pessoaRepository = pessoaRepository;
+		this.personRepository = personRepository;
 		this.mapper = mapper;
 	}
 
 	@Transactional
 	public List<PersonDTO> findAll() {
 		List<PersonDTO> result = new ArrayList<>();
-		for (Person pessoa : pessoaRepository.findAll()) {
-			result.add(mapper.map(pessoa, PersonDTO.class));
+		for (Person person : personRepository.findAll()) {
+			result.add(mapper.map(person, PersonDTO.class));
 		}
 		return result;
 	}
@@ -46,38 +46,51 @@ public class PersonService {
 	@Transactional
 	public List<PersonDTO> findByNome(String name) {
 		List<PersonDTO> result = new ArrayList<>();
-		for (Person pessoa : pessoaRepository.findByName(name)) {
-			result.add(mapper.map(pessoa, PersonDTO.class));
+		for (Person person : personRepository.findByName(name)) {
+			result.add(mapper.map(person, PersonDTO.class));
 		}
 		return result;
 	}
 	
 	@Transactional
 	public PersonDTO create(PersonDTO dto) {
-		Person pessoa = pessoaRepository.findOne(dto.getId());
-		if (pessoa == null) {
-			pessoa = mapper.map(dto, Person.class);
-			pessoaRepository.save(pessoa);
+		Person person = personRepository.findOne(dto.getId());
+		if (person == null) {
+			save(dto);
 		} else {
 			throw new ErrorException("Já existe uma pessoa com o codigo " + dto.getId() + "!");
 		}
 		
-		return mapper.map(pessoa, PersonDTO.class);
+		return mapper.map(person, PersonDTO.class);
+	}
+	
+	private void save(PersonDTO dto) {
+		personRepository.save(mapper.map(dto, Person.class));
 	}
 	
 	@Transactional
 	public void delete(long codigo) {
-		Person pessoa = pessoaRepository.findOne(codigo);
-		if (pessoa == null) {
+		Person person = personRepository.findOne(codigo);
+		if (person == null) {
 			throw new ErrorException("Não existe uma pessoa com o codigo " + codigo + "!");
 		}
 		
-		pessoaRepository.delete(pessoa);
+		personRepository.delete(person);
 	}
 
 	public PersonDTO findOne(long id) {
-		Person pessoa = pessoaRepository.findOne(id);
-		return mapper.map(pessoa, PersonDTO.class);
+		Person person = personRepository.findOne(id);
+		return mapper.map(person, PersonDTO.class);
+	}
+
+	public PersonDTO update(PersonDTO dto, long id) {
+		Person person = personRepository.findOne(dto.getId());
+		if (person == null) {
+			throw new ErrorException("Não existe está pessoa cadastrada!");
+		}
+		dto.setId(person.getId());
+		save(dto);
+		return mapper.map(person, PersonDTO.class);
 	}
 
 }
