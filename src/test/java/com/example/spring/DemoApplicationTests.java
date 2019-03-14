@@ -41,6 +41,8 @@ public class DemoApplicationTests {
 	
 	private List<PersonDTO> listPerson = new ArrayList<>();
 	
+	private Person person;
+	
 	@Before
 	public void inicializar() {
 		personRepository = EasyMock.createMock(PersonRepository.class);
@@ -50,6 +52,11 @@ public class DemoApplicationTests {
 		 * Montando a lista de pessoas
 		 */
 		gerarLista();
+		
+		/**
+		 * Monta uma pessoa
+		 */
+		getPerson();
 		
 	}
 
@@ -81,6 +88,20 @@ public class DemoApplicationTests {
 	}
 	
 	/**
+	 * Busca uma pessoa a partir do seu id
+	 * @param id Long - o id da pessoa
+	 * @return PersonDTO
+	 */
+	@Test
+	public void findOne() {
+		EasyMock.expect(personService.findOne(1L)).andReturn(mapper.map(person, PersonDTO.class));
+		EasyMock.replay(personService);
+		PersonDTO person = personService.findOne(1L);
+		assertNotNull(person);
+		EasyMock.verify(personService);
+	}
+	
+	/**
 	 * Criar pessoa
 	 * @param PersonDTO
 	 * @return PersonDTO
@@ -90,6 +111,12 @@ public class DemoApplicationTests {
 		PersonDTO dto = new PersonDTO();
 		dto.setId(12L);
 		dto.setName("Willans Firmo");
+		dto.setCellphone("(81) 98901-7738");
+		dto.setCity("Olinda");
+		dto.setNumber("697");
+		dto.setState("PE");
+		dto.setStreet("Rua Ageu Magalhães");
+		dto.setNeighborhood("Vila Popular");
 		
 		EasyMock.expect(personRepository.findOne(dto.getId())).andReturn(null);
 		EasyMock.replay(personRepository);
@@ -110,19 +137,23 @@ public class DemoApplicationTests {
 	 * Montagem da lista de Pessoas
 	 */
 	private void gerarLista() {
-		Person person = getPessoa();
-		
-		listPerson.add(mapper.map(person, PersonDTO.class));
+		listPerson.add(mapper.map(getPerson(), PersonDTO.class));
 	}
 	
 	/**
 	 * Monta uma pessoa
 	 * @return Person
 	 */
-	private Person getPessoa() {
-		Person person = new Person();
+	private Person getPerson() {
+		person = new Person();
 		person.setId(12L);
 		person.setName("Willans Firmo");
+		person.setCellphone("(81) 98901-7738");
+		person.setCity("Olinda");
+		person.setNumber("697");
+		person.setState("PE");
+		person.setStreet("Rua Ageu Magalhães");
+		person.setNeighborhood("Vila Popular");
 		
 		return person;
 	}
