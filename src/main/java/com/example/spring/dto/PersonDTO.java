@@ -4,6 +4,10 @@ import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
+import org.modelmapper.ModelMapper;
+
+import com.example.spring.model.Person;
+
 /**
  * DTO para exposição dos dados de uma pessoa
  * @author willans firmo
@@ -31,6 +35,14 @@ public class PersonDTO implements Serializable {
 	private String cellphone;
 	
 	private String phone;
+	
+	public PersonDTO() {
+		
+	}
+
+	public PersonDTO(Person p, ModelMapper mapper) {
+		mapper.map(p, this);
+	}
 
 	public Long getId() {
 		return id;

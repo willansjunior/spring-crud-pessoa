@@ -2,6 +2,7 @@ package com.example.spring.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -34,15 +35,25 @@ public class PersonService {
 		this.mapper = mapper;
 	}
 
+	/**
+	 * Busca todas as pessoas cadastradas
+	 * @return List<PersonDTO>
+	 */
 	@Transactional
 	public List<PersonDTO> findAll() {
 		List<PersonDTO> result = new ArrayList<>();
 		for (Person person : personRepository.findAll()) {
 			result.add(mapper.map(person, PersonDTO.class));
 		}
-		return result;
+		return personRepository.findAll().stream()
+				.map(p -> new PersonDTO(p, mapper)).collect(Collectors.toList());
 	}
 
+	/**
+	 * Busca todas as pessoas a partir do nome
+	 * @param name
+	 * @return List<PersonDTO>
+	 */
 	@Transactional
 	public List<PersonDTO> findByNome(String name) {
 		List<PersonDTO> result = new ArrayList<>();
@@ -52,6 +63,11 @@ public class PersonService {
 		return result;
 	}
 	
+	/**
+	 * Cadastra uma nova pessoa
+	 * @param dto
+	 * @return PersonDTO
+	 */
 	@Transactional
 	public PersonDTO create(PersonDTO dto) {
 		Person person = personRepository.findOne(dto.getId());
@@ -64,10 +80,18 @@ public class PersonService {
 		return mapper.map(person, PersonDTO.class);
 	}
 	
+	/**
+	 * Realiza a função de salvar ou atualizar uma pessoa
+	 * @param dto
+	 */
 	private void save(PersonDTO dto) {
 		personRepository.save(mapper.map(dto, Person.class));
 	}
 	
+	/**
+	 * Remove uma pessoa do banco de dados a partir do id
+	 * @param codigo
+	 */
 	@Transactional
 	public void delete(long codigo) {
 		Person person = personRepository.findOne(codigo);
@@ -78,11 +102,23 @@ public class PersonService {
 		personRepository.delete(person);
 	}
 
+	/**
+	 * Busca uma unica pessoa no banco a partir do seu id
+	 * @param id
+	 * @return PersonDTO
+	 */
+	@Transactional
 	public PersonDTO findOne(long id) {
 		Person person = personRepository.findOne(id);
 		return mapper.map(person, PersonDTO.class);
 	}
 
+	/**
+	 * Atualiza os dados de uma pessoa
+	 * @param dto
+	 * @param id
+	 * @return PersonDTO
+	 */
 	public PersonDTO update(PersonDTO dto, long id) {
 		Person person = personRepository.findOne(dto.getId());
 		if (person == null) {
