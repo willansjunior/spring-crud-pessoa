@@ -46,7 +46,7 @@ public class PersonController {
 		return ResponseEntity.ok(personService.findOne(id));
 	}
 	
-	@RequestMapping(value = "",
+	@RequestMapping(value = "/",
 			method = RequestMethod.POST,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PersonDTO> create(@Validated @RequestBody PersonDTO dto) {

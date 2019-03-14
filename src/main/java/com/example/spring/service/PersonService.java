@@ -70,22 +70,15 @@ public class PersonService {
 	 */
 	@Transactional
 	public PersonDTO create(PersonDTO dto) {
-		Person person = personRepository.findOne(dto.getId());
-		if (person == null) {
-			save(dto);
-		} else {
-			throw new ErrorException("Já existe uma pessoa com o codigo " + dto.getId() + "!");
-		}
-		
-		return mapper.map(person, PersonDTO.class);
+		return mapper.map(save(dto), PersonDTO.class);
 	}
 	
 	/**
 	 * Realiza a função de salvar ou atualizar uma pessoa
 	 * @param dto - {@link PersonDTO}
 	 */
-	private void save(PersonDTO dto) {
-		personRepository.save(mapper.map(dto, Person.class));
+	private Person save(PersonDTO dto) {
+		return personRepository.save(mapper.map(dto, Person.class));
 	}
 	
 	/**
@@ -120,13 +113,12 @@ public class PersonService {
 	 * @return {@link PersonDTO}
 	 */
 	public PersonDTO update(PersonDTO dto, long id) {
-		Person person = personRepository.findOne(dto.getId());
+		Person person = personRepository.findOne(id);
 		if (person == null) {
 			throw new ErrorException("Não existe está pessoa cadastrada!");
 		}
 		dto.setId(person.getId());
-		save(dto);
-		return mapper.map(person, PersonDTO.class);
+		return mapper.map(save(dto), PersonDTO.class);
 	}
 
 }

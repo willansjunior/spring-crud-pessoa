@@ -1,7 +1,6 @@
 package com.example.spring;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,14 +117,7 @@ public class DemoApplicationTests {
 		dto.setStreet("Rua Ageu Magalhães");
 		dto.setNeighborhood("Vila Popular");
 		
-		EasyMock.expect(personRepository.findOne(dto.getId())).andReturn(null);
-		EasyMock.replay(personRepository);
-		Person personMock = personRepository.findOne(dto.getId());
-		assertNull(personMock);
-		
-		EasyMock.verify(personRepository);
-		
-		EasyMock.expect(personService.create(dto)).andReturn(dto);
+		EasyMock.expect(personService.create(dto)).andReturn(mapper.map(person, PersonDTO.class));
 		EasyMock.replay(personService);
 		PersonDTO personDTO = personService.create(dto);
 		assertNotNull(personDTO);
@@ -154,6 +146,25 @@ public class DemoApplicationTests {
 		assertNotNull(personDTO);
 		
 		EasyMock.verify(personService);
+	}
+	
+	/**
+	 * Teste de deleção de uma pessoa
+	 * @param dto, id - {@link PersonDTO}, {@link Long}
+	 */
+	@Test
+	public void deletePerson() {
+		EasyMock.expect(personRepository.findOne(12L)).andReturn(person);
+		EasyMock.replay(personRepository);
+		Person personMock = personRepository.findOne(12L);
+		assertNotNull(personMock);
+		
+		EasyMock.verify(personRepository);
+		
+		PersonService personServiceMock = EasyMock.createNiceMock(PersonService.class);
+		
+		EasyMock.replay(personServiceMock);
+		personServiceMock.delete(12L);
 	}
 	
 	/**
