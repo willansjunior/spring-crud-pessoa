@@ -51,8 +51,8 @@ public class PersonService {
 
 	/**
 	 * Busca todas as pessoas a partir do nome
-	 * @param name
-	 * @return List<PersonDTO>
+	 * @param name {@link String}
+	 * @return {@link List}<{@link PersonDTO}>
 	 */
 	@Transactional
 	public List<PersonDTO> findByNome(String name) {
@@ -65,8 +65,8 @@ public class PersonService {
 	
 	/**
 	 * Cadastra uma nova pessoa
-	 * @param dto
-	 * @return PersonDTO
+	 * @param dto - {@link PersonDTO}
+	 * @return {@link PersonDTO}
 	 */
 	@Transactional
 	public PersonDTO create(PersonDTO dto) {
@@ -82,7 +82,7 @@ public class PersonService {
 	
 	/**
 	 * Realiza a função de salvar ou atualizar uma pessoa
-	 * @param dto
+	 * @param dto - {@link PersonDTO}
 	 */
 	private void save(PersonDTO dto) {
 		personRepository.save(mapper.map(dto, Person.class));
@@ -90,13 +90,13 @@ public class PersonService {
 	
 	/**
 	 * Remove uma pessoa do banco de dados a partir do id
-	 * @param codigo
+	 * @param id - {@link Long}
 	 */
 	@Transactional
-	public void delete(long codigo) {
-		Person person = personRepository.findOne(codigo);
+	public void delete(long id) {
+		Person person = personRepository.findOne(id);
 		if (person == null) {
-			throw new ErrorException("Não existe uma pessoa com o codigo " + codigo + "!");
+			throw new ErrorException("Não existe uma pessoa com o codigo " + id + "!");
 		}
 		
 		personRepository.delete(person);
@@ -104,8 +104,8 @@ public class PersonService {
 
 	/**
 	 * Busca uma unica pessoa no banco a partir do seu id
-	 * @param id
-	 * @return PersonDTO
+	 * @param id - {@link Long}
+	 * @return {@link PersonDTO}
 	 */
 	@Transactional
 	public PersonDTO findOne(long id) {
@@ -115,9 +115,9 @@ public class PersonService {
 
 	/**
 	 * Atualiza os dados de uma pessoa
-	 * @param dto
-	 * @param id
-	 * @return PersonDTO
+	 * @param dto - {@link PersonDTO}
+	 * @param id - {@link Long}
+	 * @return {@link PersonDTO}
 	 */
 	public PersonDTO update(PersonDTO dto, long id) {
 		Person person = personRepository.findOne(dto.getId());

@@ -49,20 +49,20 @@ public class DemoApplicationTests {
 		personService = EasyMock.createMock(PersonService.class);
 		
 		/**
-		 * Montando a lista de pessoas
-		 */
-		gerarLista();
-		
-		/**
 		 * Monta uma pessoa
 		 */
 		getPerson();
+		
+		/**
+		 * Montando a lista de pessoas
+		 */
+		gerarLista();
 		
 	}
 
 	/**
 	 * Listar todas as pessoas
-	 * @return List<PersonDTO>
+	 * @return {@link List}<{@link PersonDTO}>
 	 */
 	@Test
 	public void findAllPerson() {
@@ -76,7 +76,7 @@ public class DemoApplicationTests {
 	/**
 	 * Listar todas as pessoas usando como filtro o nome
 	 * @param nome String - o nome da pessoa
-	 * @return List<PersonDTO> - Retorno em lista pois podem existir homonimos
+	 * @return {@link List}<{@link PersonDTO}> - Retorno em lista pois podem existir homonimos
 	 */
 	@Test
 	public void findByNamePerson() {
@@ -90,7 +90,7 @@ public class DemoApplicationTests {
 	/**
 	 * Busca uma pessoa a partir do seu id
 	 * @param id Long - o id da pessoa
-	 * @return PersonDTO
+	 * @return {@link PersonDTO}
 	 */
 	@Test
 	public void findOne() {
@@ -103,8 +103,8 @@ public class DemoApplicationTests {
 	
 	/**
 	 * Criar pessoa
-	 * @param PersonDTO
-	 * @return PersonDTO
+	 * @param {@link PersonDTO}
+	 * @return {@link PersonDTO}
 	 */
 	@Test
 	public void createPerson() {
@@ -134,20 +134,59 @@ public class DemoApplicationTests {
 	}
 	
 	/**
+	 * @param {@link PersonDTO}
+	 * @return {@link PersonDTO}
+	 */
+	@Test
+	public void updatePerson() {
+		PersonDTO dto = mapper.map(gerarUpdatePerson(), PersonDTO.class);
+		
+		EasyMock.expect(personRepository.findOne(12L)).andReturn(person);
+		EasyMock.replay(personRepository);
+		Person personMock = personRepository.findOne(12L);
+		assertNotNull(personMock);
+		
+		EasyMock.verify(personRepository);
+		
+		EasyMock.expect(personService.update(dto, 12L)).andReturn(dto);
+		EasyMock.replay(personService);
+		PersonDTO personDTO = personService.update(dto, 12L);
+		assertNotNull(personDTO);
+		
+		EasyMock.verify(personService);
+	}
+	
+	/**
 	 * Montagem da lista de Pessoas
+	 * @return {@link List}<{@link PersonDTO}>
 	 */
 	private void gerarLista() {
-		listPerson.add(mapper.map(getPerson(), PersonDTO.class));
+		listPerson.add(mapper.map(person, PersonDTO.class));
 	}
 	
 	/**
 	 * Monta uma pessoa
-	 * @return Person
+	 * @return {@link Person}
 	 */
-	private Person getPerson() {
+	private void getPerson() {
 		person = new Person();
 		person.setId(12L);
 		person.setName("Willans Firmo");
+		person.setCellphone("(81) 98901-7738");
+		person.setCity("Olinda");
+		person.setNumber("697");
+		person.setState("PE");
+		person.setStreet("Rua Ageu Magalhães");
+		person.setNeighborhood("Vila Popular");
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private Person gerarUpdatePerson() {
+		Person person = new Person();
+		person.setName("Willans Júnior");
 		person.setCellphone("(81) 98901-7738");
 		person.setCity("Olinda");
 		person.setNumber("697");
